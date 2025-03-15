@@ -14,8 +14,8 @@ import timm
 from tqdm import tqdm
 
 # 1) Configuration
-CSV_PATH = '../csvs/train.csv'   # CSV file containing filenames & correlations
-IMG_DIR = '../images'           # Directory with all scatter plot images
+CSV_PATH = '../../csvs/train.csv'   # CSV file containing filenames & correlations
+IMG_DIR = '../../images'           # Directory with all scatter plot images
 BATCH_SIZE = 128
 NUM_EPOCHS = 10
 LEARNING_RATE = 1e-4
@@ -122,6 +122,6 @@ for epoch in range(NUM_EPOCHS):
           f"Train Loss: {epoch_loss:.4f}, "
           f"Val Loss: {val_loss:.4f}")
 
-    # torch.save(model.state_dict(), f"checkpoints/checkpoint_epoch_{epoch + 1}.pt")
+    # torch.save(model.state_dict(), f"../../checkpoints/checkpoint_epoch_{epoch + 1}.pt")
 
 

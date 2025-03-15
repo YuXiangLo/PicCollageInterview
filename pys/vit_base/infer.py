@@ -48,13 +48,13 @@ class InferenceDataset(Dataset):
 
 def main():
     parser = argparse.ArgumentParser(description="Inference script for ViT correlation model")
-    parser.add_argument('--checkpoint', type=str, default='../checkpoints/checkpoint_epoch_8.pt',
+    parser.add_argument('--checkpoint', type=str, default='../../checkpoints/checkpoint_epoch_8.pt',
                         help="Path to the trained .pt checkpoint file")
-    parser.add_argument('--test_csv', type=str, default='../csvs/test.csv',
+    parser.add_argument('--test_csv', type=str, default='../../csvs/test.csv',
                         help="CSV file with 'id' column listing image IDs (no .png extension) for inference")
-    parser.add_argument('--img_dir', type=str, default='../images',
+    parser.add_argument('--img_dir', type=str, default='../../images',
                         help="Directory containing the images (default: 'images')")
-    parser.add_argument('--output_csv', type=str, default='../csvs/predictions.csv',
+    parser.add_argument('--output_csv', type=str, default='../../csvs/predictions.csv',
                         help="Output CSV file to store predictions (default: 'predictions.csv')")
     parser.add_argument('--batch_size', type=int, default=128,
                         help="Batch size for inference (default: 32)")
@@ -69,7 +69,6 @@ def main():
 
     # Read test CSV
     df_test = pd.read_csv(args.test_csv)
-    # We assume there's a column named 'id'. If it's different, please adjust.
     test_ids = df_test['id'].values
     
     # Define the same image transform as training
@@ -99,17 +98,7 @@ def main():
     model = timm.create_model('vit_base_patch16_224', pretrained=False, num_classes=1)
 
     # Load checkpoint
-    # If you used DataParallel in training, you might have saved model.module.state_dict().
-    # Typically, you load it into the same model architecture here:
     state_dict = torch.load(args.checkpoint, map_location=DEVICE)
-    # If your checkpoint was saved with DataParallel, keys might start with "module."
-    # Often, PyTorch will handle it automatically, but if not, you can do:
-    #    from collections import OrderedDict
-    #    new_state_dict = OrderedDict()
-    #    for k, v in state_dict.items():
-    #        name = k[7:] if k.startswith("module.") else k
-    #        new_state_dict[name] = v
-    #    model.load_state_dict(new_state_dict)
     model.load_state_dict(state_dict)
 
     model = model.to(DEVICE)
