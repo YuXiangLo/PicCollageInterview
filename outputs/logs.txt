@@ -1,0 +1,2 @@
+Epoch 1/10 => Train Loss: 0.3533, Val Loss: 0.1757
+Epoch 2/10 => Train Loss: 0.1261, Val Loss: 0.0803
