@@ -48,7 +48,7 @@ class InferenceDataset(Dataset):
 
 def main():
     parser = argparse.ArgumentParser(description="Inference script for ViT correlation model")
-    parser.add_argument('--checkpoint', type=str, default='../../checkpoints/checkpoint_epoch_8.pt',
+    parser.add_argument('--checkpoint', type=str, default='../../checkpoints/vit_checkpoint_epoch_8.pt',
                         help="Path to the trained .pt checkpoint file")
     parser.add_argument('--test_csv', type=str, default='../../csvs/test.csv',
                         help="CSV file with 'id' column listing image IDs (no .png extension) for inference")

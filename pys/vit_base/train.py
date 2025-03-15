@@ -122,6 +122,6 @@ for epoch in range(NUM_EPOCHS):
           f"Train Loss: {epoch_loss:.4f}, "
           f"Val Loss: {val_loss:.4f}")
 
-    # torch.save(model.state_dict(), f"../../checkpoints/checkpoint_epoch_{epoch + 1}.pt")
+    # torch.save(model.state_dict(), f"../../checkpoints/vit_checkpoint_epoch_{epoch + 1}.pt")
 
 
