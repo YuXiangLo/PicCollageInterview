@@ -27,5 +27,5 @@ def plot_predictions(test_csv, pred_csv, output_fn):
     plt.savefig(output_fn)
 
 # Example usage:
-plot_predictions("../csvs/test.csv", "../csvs/predictions.csv", '../outputs/visualization.png')
+plot_predictions("../../csvs/test.csv", "../../outputs/cnn_predictions.csv", '../../outputs/cnn_visualization.png')
 

@@ -1,7 +1,7 @@
 import pandas as pd
 
-df_test = pd.read_csv('../csvs/test.csv')
-df_pred = pd.read_csv('../csvs/predictions.csv')
+df_test = pd.read_csv('../../csvs/test.csv')
+df_pred = pd.read_csv('../../outputs/cnn_predictions.csv')
 
 corr_test = df_test['corr'].tolist()
 corr_pred = df_pred['pred_corr'].tolist()
