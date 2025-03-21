@@ -12,8 +12,8 @@ from tqdm import tqdm
 ###############################################################################
 # 1) Configuration
 ###############################################################################
-CSV_PATH = '../../csvs/train.csv'   # CSV with ['id', 'corr']
-IMG_DIR = '../../images'            # Directory with images: id + '.png'
+CSV_PATH = '../../csvs/train.csv'   
+IMG_DIR = '../../images'            
 CHECKPOINT_DIR = '../../checkpoints'
 VAL_SPLIT = 0.1
 BATCH_SIZE = 256
@@ -64,24 +64,17 @@ class SmallCNN(nn.Module):
     """
     def __init__(self):
         super().__init__()
-        # Convolution layers
         self.conv1 = nn.Conv2d(in_channels=3, out_channels=16, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(in_channels=16, out_channels=32, kernel_size=3, padding=1)
         self.conv3 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         
-        # We'll produce an embedding of size 128 from the final feature map
-        # after the 3 conv layers + pooling. The input image is 224x224,
-        # so after 3 poolings, it becomes 224->112->56->28 => 28x28.
-        # Channels: 64, so feature map is [64, 28, 28] => 64*28*28 = 50176.
-        # We'll map that to 128-dim.
         self.embedding_fc = nn.Linear(64 * 28 * 28, 128)
 
         # Final linear layer to get 1 output (correlation)
         self.regressor = nn.Linear(128, 1)
 
     def forward(self, x):
-        # Conv + ReLU + Pool
         x = F.relu(self.conv1(x))
         x = self.pool(x)
 
@@ -91,15 +84,10 @@ class SmallCNN(nn.Module):
         x = F.relu(self.conv3(x))
         x = self.pool(x)
 
-        # Flatten
-        x = x.view(x.size(0), -1)  # shape [B, 64*28*28]
-        
-        # Map to 128-dim embedding
-        x = F.relu(self.embedding_fc(x))  # shape [B, 128]
-        
-        # Finally, get a single correlation output
-        out = self.regressor(x)  # shape [B, 1]
-        return out.squeeze(1)    # shape [B]
+        x = x.view(x.size(0), -1)           # Flatten
+        x = F.relu(self.embedding_fc(x))    # 128-dim
+        out = self.regressor(x).squeeze(1)  # scalar output
+        return out
 
 
 ###############################################################################

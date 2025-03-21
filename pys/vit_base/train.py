@@ -7,25 +7,24 @@ import torchvision.transforms as T
 from torch.utils.data import Dataset, DataLoader, random_split
 from PIL import Image
 
-# If you don't have timm installed, do: pip install timm
 import timm
 
 # For progress bar
 from tqdm import tqdm
 
 # 1) Configuration
-CSV_PATH = '../../csvs/train.csv'   # CSV file containing filenames & correlations
-IMG_DIR = '../../images'           # Directory with all scatter plot images
+CSV_PATH = '../../csvs/train.csv'   
+IMG_DIR = '../../images'            
 BATCH_SIZE = 128
 NUM_EPOCHS = 10
 LEARNING_RATE = 1e-4
-VAL_SPLIT = 0.1              # 10% of data for validation
-IMG_SIZE = 224               # We'll train ViT on 224x224
+VAL_SPLIT = 0.1  
+IMG_SIZE = 224   
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # 2) Read CSV and prepare list of (path, correlation)
 df = pd.read_csv(CSV_PATH)
-all_filenames = df['id'].values           # or df['filename'] if your column is named differently
+all_filenames = df['id'].values
 all_labels = df['corr'].values.astype(float)
 
 # 3) Define a Dataset that loads images and their correlation
@@ -53,7 +52,6 @@ class CorrelationDataset(Dataset):
 train_transform = T.Compose([
     T.Resize((IMG_SIZE, IMG_SIZE)),
     T.ToTensor(),
-    # ImageNet mean & std
     T.Normalize(mean=[0.485, 0.456, 0.406],
                 std=[0.229, 0.224, 0.225]),
 ])
@@ -70,7 +68,6 @@ train_loader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True, nu
 val_loader   = DataLoader(val_dataset,   batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
 # 6) Create a ViT-Base model from timm, set num_classes=1 for regression
-#    pretrained=False => from scratch (no ImageNet weights).
 model = timm.create_model('vit_base_patch16_224', pretrained=False, num_classes=1)
 model = model.to(DEVICE)
 
@@ -84,7 +81,6 @@ for epoch in range(NUM_EPOCHS):
     running_loss = 0.0
     
     # --- TRAINING PASS ---
-    # Use tqdm for a progress bar over the training loader
     train_batches = 0
     for images, labels in tqdm(train_loader, desc=f"Epoch {epoch+1}/{NUM_EPOCHS} [TRAIN]"):
         images = images.to(DEVICE)
@@ -117,7 +113,6 @@ for epoch in range(NUM_EPOCHS):
 
     val_loss = val_loss_sum / len(val_loader.dataset)
 
-    # Print logs for this epoch
     print(f"Epoch {epoch + 1}/{NUM_EPOCHS} => "
           f"Train Loss: {epoch_loss:.4f}, "
           f"Val Loss: {val_loss:.4f}")

@@ -63,7 +63,6 @@ def main():
 
     args = parser.parse_args()
 
-    # Decide on device
     DEVICE = torch.device(args.device if torch.cuda.is_available() else 'cpu')
     print(f"Inference device: {DEVICE}")
 
@@ -94,10 +93,9 @@ def main():
         pin_memory=True
     )
 
-    # Create the same model architecture used in training
-    model = timm.create_model('vit_base_patch16_224', pretrained=False, num_classes=1)
 
     # Load checkpoint
+    model = timm.create_model('vit_base_patch16_224', pretrained=False, num_classes=1)
     state_dict = torch.load(args.checkpoint, map_location=DEVICE)
     model.load_state_dict(state_dict)
 
@@ -117,8 +115,6 @@ def main():
             batch_preds = batch_outputs.cpu().numpy()
             predictions.extend(batch_preds)
 
-    # Store predictions in a DataFrame
-    # The length of `predictions` should match the length of test_ids
     df_out = pd.DataFrame({
         'id': test_ids,
         'pred_corr': predictions

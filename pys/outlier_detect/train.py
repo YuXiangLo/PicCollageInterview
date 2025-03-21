@@ -13,8 +13,8 @@ from tqdm import tqdm
 ###############################################################################
 # 1) Configuration
 ###############################################################################
-CSV_PATH = '../../csvs/all_data.csv'   # CSV with ['id', 'corr']
-IMG_DIR = '../../images'            # Directory with images: id + '.png'
+CSV_PATH = '../../csvs/all_data.csv'  
+IMG_DIR = '../../images'              
 CHECKPOINT_DIR = '../../checkpoints'
 KFOLDS = 10
 BATCH_SIZE = 256

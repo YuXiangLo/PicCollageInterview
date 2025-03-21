@@ -21,8 +21,6 @@ class SmallCNN(nn.Module):
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
 
-        # After 3 poolings on a 224x224 image, we get 28x28 with 64 channels:
-        # => 64*28*28 = 50176 => map to 128
         self.embedding_fc = nn.Linear(64 * 28 * 28, 128)
         self.regressor = nn.Linear(128, 1)
 
@@ -71,7 +69,7 @@ class InferenceDataset(Dataset):
         if self.transform:
             image = self.transform(image)
 
-        # If you want to keep the ground truth in the item (for later comparison):
+        # Retain ground correlations for later work if needed
         if self.has_corr:
             corr_value = row['corr']
             return image, img_id, corr_value
